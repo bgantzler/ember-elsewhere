@@ -7,6 +7,8 @@ export default Component.extend({
   layout,
   service: service('ember-elsewhere'),
   tagName: '',
+  // Its unfortunate send was used as a param name as there is a function named send on Component
+  send: null,
   didReceiveAttrs() {
     if (this.get('name')) {
       throw new Error(`to-elsewhere takes a "named=" parameter, not "name="`);

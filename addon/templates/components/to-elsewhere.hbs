@@ -1,1 +1,5 @@
-{{yield}}
+{{#if hasBlock}}
+  {{#elsewhere-portal name=this.named}}
+    {{yield}}
+  {{/elsewhere-portal}}
+{{/if}}

@@ -1,11 +1,13 @@
 {{#if initialized}}
   {{#let (get service.actives name) as |active| }}
-    {{#if hasBlock}}
-      {{yield active.lastObject.component active.lastObject.outsideParams}}
-    {{else}}
-      {{#with active.lastObject.component as |c|}}
-        {{component c}}
-      {{/with}}
-    {{/if}}
+    {{#let (component 'elsewhere-target' name=this.name) as |elsewhereTarget| }}
+      {{#let (if active.lastObject.component (component active.lastObject.component) elsewhereTarget ) as |c| }}
+      {{#if hasBlock}}
+        {{yield c active.lastObject.outsideParams}}
+      {{else}}
+        {{c}}
+      {{/if}}
+    {{/let}}
+    {{/let}}
   {{/let}}
 {{/if}}

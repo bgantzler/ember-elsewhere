@@ -47,10 +47,11 @@ module('Integration | Component | to elsewhere', function(hooks) {
     assert.notEqual(this.element.querySelector('.my-target').textContent.trim().indexOf('Hello World from Bar'), -1);
   });
 
-  test('destination can come before source', async function(assert) {
-    await render(hbs`<div class="my-target">{{from-elsewhere name="my-target"}}</div><div class="source">{{to-elsewhere named="my-target" send=(component "x-foo")}}</div>`);
-    assert.dom(this.element.querySelector('.my-target')).hasText('Hello World from Foo');
-  });
+  // This is a duplicate of 'it works with inline from-elsewhere'
+  // test('destination can come before source', async function(assert) {
+  //   await render(hbs`<div class="my-target">{{from-elsewhere name="my-target"}}</div><div class="source">{{to-elsewhere named="my-target" send=(component "x-foo")}}</div>`);
+  //   assert.dom(this.element.querySelector('.my-target')).hasText('Hello World from Foo');
+  // });
 
   test('source can come before destination', async function(assert) {
     await render(hbs`<div class="source">{{to-elsewhere named="my-target" send=(component "x-foo")}}</div><div class="my-target">{{from-elsewhere name="my-target"}}</div>`);
@@ -61,7 +62,6 @@ module('Integration | Component | to elsewhere', function(hooks) {
     await render(hbs`<div class="source">{{to-elsewhere named="my-target" send=(component "x-blip") outsideParams=(hash greeting="Hello World")}}</div><div class="my-target">{{#from-elsewhere name="my-target" as |content outsideParams|}} {{component content outsideParams=outsideParams}}{{/from-elsewhere}}</div>`);
     assert.dom(this.element.querySelector('.my-target')).hasText('Hello World from Blip');
   });
-
 
   test('it accepts an outsideParams object for block form', async function(assert) {
     await render(hbs`
@@ -112,4 +112,36 @@ module('Integration | Component | to elsewhere', function(hooks) {
     assert.equal(this.element.querySelector('#bar').nextElementSibling, document.querySelector('#foo'));
     assert.equal(this.element.querySelector('#foo').nextElementSibling, document.querySelector('#baz'));
   })
+
+  test('from-elsewhere inline works with block form of to-elsewhere', async function(assert) {
+    await render(hbs`
+      <div class="my-target">
+        {{from-elsewhere name="my-target"}}
+      </div>
+      <div class="source">
+        {{#to-elsewhere named="my-target"}}
+            {{x-foo}}
+        {{/to-elsewhere}}
+      </div>
+    `);
+    assert.dom(this.element.querySelector('.my-target')).hasText('Hello World from Foo');
+  });
+
+  test('from-elsewhere block-form works with block-form from-elsewhere', async function(assert) {
+    await render(hbs`
+      <div class="my-target">
+          {{#from-elsewhere name="my-target" as |c|}}
+              {{component c}}
+          {{/from-elsewhere}}
+      </div>
+      <div class="source">
+        {{#to-elsewhere named="my-target"}}
+            {{x-foo}}
+        {{/to-elsewhere}}
+      </div>
+    `);
+    assert.dom(this.element.querySelector('.my-target')).hasText('Hello World from Foo');
+  });
+
+
 });

@@ -3,4 +3,9 @@ import layout from '../templates/components/multiple-from-elsewhere';
 
 export default FromElsewhereComponent.extend({
   layout,
+  didInsertElement() {
+
+  },
+  willDestroy() {
+  }
 });
