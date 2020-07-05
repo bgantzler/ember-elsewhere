@@ -40,8 +40,7 @@
   </div>
 
   <div class="bottom-bar">
-    {{#from-elsewhere name="actions" append=true as |c|}}
-      {{log "bottom" c}}
+    {{#from-elsewhere name="actions" multiple=true as |c|}}
       <div class="action">
         {{component c}}
       </div>

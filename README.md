@@ -47,10 +47,10 @@ For fancier behaviors, you can use the block form of `{{#from-elsewhere}}`, whic
 
 ## Rendering multiple components into a single target
 
-There might be use cases where you would like to render multiple component into a single target, for example a from-elsewhere "actions" might receive multiple action buttons via to-elsewhere. Pass the append property true.
+There might be use cases where you would like to render multiple component into a single target, for example a from-elsewhere "actions" might receive multiple action buttons via to-elsewhere. Pass the multiple property true.
 
 ```hbs
-{{from-elsewhere name="actions" append=true}}
+{{from-elsewhere name="actions" multiple=true}}
 <!-- ... -->
 {{#to-elsewhere named="actions"}}
   {{test-button text="Button1"}}

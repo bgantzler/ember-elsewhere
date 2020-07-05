@@ -78,10 +78,30 @@ module('Integration | Component | to elsewhere', function(hooks) {
     assert.dom(this.element.querySelector('.my-target')).hasText('Hello World from Foo');
   });
 
-  test('from-elsewhere block form with append true works with  block form of to-elsewhere', async function (assert) {
+  test('from-elsewhere inline with multiple true works with  block form of to-elsewhere', async function (assert) {
     await render(hbs`
         <div class="my-target">
-          {{#from-elsewhere name="my-target" append=true as |c|}}
+          {{from-elsewhere name="my-target" multiple=true}}
+        </div>
+        <div class="source">
+          {{#to-elsewhere named="my-target"}}
+              {{x-foo}}
+          {{/to-elsewhere}}
+        </div>
+        <div class="source">
+          {{#to-elsewhere named="my-target"}}
+              {{x-bar}}
+          {{/to-elsewhere}}
+        </div>
+      `);
+    assert.notEqual(this.element.querySelector('.my-target').textContent.trim().indexOf('Hello World from Foo'), -1);
+    assert.notEqual(this.element.querySelector('.my-target').textContent.trim().indexOf('Hello World from Bar'), -1);
+  });
+
+  test('from-elsewhere block form with multiple true works with  block form of to-elsewhere', async function (assert) {
+    await render(hbs`
+        <div class="my-target">
+          {{#from-elsewhere name="my-target" multiple=true as |c|}}
               {{component c}}
           {{/from-elsewhere}}
         </div>

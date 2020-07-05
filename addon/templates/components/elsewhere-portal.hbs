@@ -1,10 +1,10 @@
-{{#if this.initialized}}
-  {{#if this.targetAppend}}
-    {{#in-element this.targetElement insertBefore=null}}
+{{#if this.target.element}}
+  {{#if this.target.multiple}}
+    {{#in-element this.target.element insertBefore=null}}
       {{yield}}
     {{/in-element}}
   {{else}}
-    {{#in-element this.targetElement}}
+    {{#in-element this.target.element}}
       {{yield}}
     {{/in-element}}
   {{/if}}

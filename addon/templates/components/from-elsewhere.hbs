@@ -1,16 +1,13 @@
 {{#if initialized}}
-  {{log "name" this.name}}
   {{#let (get this.service.activeInfo this.name) as |activeInfo| }}
-    {{log "actives" activeInfo}}
     {{#if activeInfo}}
-        {{log "which" (if activeInfo.children.length "comp" "inline" )}}
-        {{#let (if activeInfo.component (component activeInfo.component) (component 'elsewhere-target' name=this.name) ) as |c| }}
-          {{#if hasBlock}}
-            {{yield c activeInfo.outsideParams}}
-          {{else}}
-            {{component c}}
-          {{/if}}
-        {{/let}}
+      {{#let (if activeInfo.component activeInfo.component (component 'elsewhere-target' name=this.name multiple=this.multiple) ) as |c| }}
+        {{#if hasBlock}}
+          {{yield c activeInfo.outsideParams}}
+        {{else}}
+          {{component c}}
+        {{/if}}
+      {{/let}}
     {{/if}}
   {{/let}}
 {{/if}}

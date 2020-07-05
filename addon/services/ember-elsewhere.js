@@ -1,30 +1,29 @@
 import Service from '@ember/service';
 import { run } from '@ember/runloop';
-import EmObject from '@ember/object';
+import EmObject, {set} from '@ember/object';
 import { A as emArray } from '@ember/array';
 
 export default Service.extend({
   init() {
     this._super();
-    this.set('actives', EmObject.create());
+    set(this, 'actives', EmObject.create());
     this._alive = {};
-    this._targets = {};
+    this.targets = {};
     this._counter = 1;
   },
 
   registerTarget(name, options) {
-    this._targets[name] = {
-      name,
-      options
-    };
+    let targets = Object.assign({}, this.targets);
+    targets[name] = options;
+
+    // Targets must be immutable until we can get tracking
+    set(this, 'targets', targets);
   },
 
   deregisterTarget(name) {
-    delete this._targets[name];
-  },
-
-  targetFor(name) {
-    return this._targets[name];
+    let targets = Object.assign({}, this.targets);
+    delete targets[name];
+    set(this, 'targets', targets);
   },
 
   show(sourceId, name, component, outsideParams, order = 0) {
@@ -58,9 +57,9 @@ export default Service.extend({
     }
 
     // this is for {{multiple-from-elsewhere}}
-    this.set('actives', this._createActives());
+    set(this, 'actives', this._createActives());
     // this is for {{from-elsewhere}}
-    this.set('activeInfo', this._createActiveInfo());
+    set(this, 'activeInfo', this._createActiveInfo());
   },
 
   _createActiveInfo() {
