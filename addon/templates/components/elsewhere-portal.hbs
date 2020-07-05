@@ -1,5 +1,4 @@
 {{#if this.initialized}}
-  {{log "append" this.targetAppend}}
   {{#if this.targetAppend}}
     {{#in-element this.targetElement insertBefore=null}}
       {{yield}}

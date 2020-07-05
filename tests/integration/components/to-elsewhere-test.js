@@ -14,6 +14,7 @@ module('Integration | Component | to elsewhere', function(hooks) {
   });
 
   test('it works with inline from-elsewhere', async function(assert) {
+    debugger;
     await render(hbs`<div class="my-target">{{from-elsewhere name="my-target"}}</div><div class="source">{{to-elsewhere named="my-target" send=(component "x-foo")}}</div>`);
     assert.dom(this.element.querySelector('.my-target')).hasText('Hello World from Foo');
   });
