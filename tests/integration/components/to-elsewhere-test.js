@@ -14,7 +14,6 @@ module('Integration | Component | to elsewhere', function(hooks) {
   });
 
   test('it works with inline from-elsewhere', async function(assert) {
-    debugger;
     await render(hbs`<div class="my-target">{{from-elsewhere name="my-target"}}</div><div class="source">{{to-elsewhere named="my-target" send=(component "x-foo")}}</div>`);
     assert.dom(this.element.querySelector('.my-target')).hasText('Hello World from Foo');
   });
@@ -63,7 +62,7 @@ module('Integration | Component | to elsewhere', function(hooks) {
     assert.dom(this.element.querySelector('.my-target')).hasText('Hello World from Foo');
   });
 
-  test('from-elsewhere block-form works with block-form from-elsewhere', async function(assert) {
+  test('from-elsewhere block-form works with block form of to-elsewhere', async function(assert) {
     await render(hbs`
       <div class="my-target">
           {{#from-elsewhere name="my-target" as |c|}}
@@ -79,7 +78,7 @@ module('Integration | Component | to elsewhere', function(hooks) {
     assert.dom(this.element.querySelector('.my-target')).hasText('Hello World from Foo');
   });
 
-  test('to-elsewhere block-form works with with block-form from-elsewhere with append true', async function (assert) {
+  test('from-elsewhere block form with append true works with  block form of to-elsewhere', async function (assert) {
     await render(hbs`
         <div class="my-target">
           {{#from-elsewhere name="my-target" append=true as |c|}}

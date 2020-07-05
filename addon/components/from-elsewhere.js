@@ -17,6 +17,7 @@ export default Component.extend({
     if (this.get('named')) {
       throw new Error(`from-elsewhere takes a "name" parameter, not "named"`);
     }
+
   },
 
   // We don't yield any content on the very first render pass, because
@@ -31,9 +32,6 @@ export default Component.extend({
   init() {
     this._super();
 
-    this.get('service').registerTarget(this.get('name'), {
-      append: this.get('append')
-    })
     let promise = new Promise(resolve => {
       schedule('afterRender', () => {
         if (!this.isDestroyed) {
@@ -41,6 +39,10 @@ export default Component.extend({
         }
         resolve();
       });
+    });
+
+    this.get('service').registerTarget(this.get('name'), {
+      append: this.get('append')
     });
 
     let fastboot = getOwner(this).lookup('service:fastboot');

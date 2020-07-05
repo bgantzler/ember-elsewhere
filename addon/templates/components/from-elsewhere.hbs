@@ -1,13 +1,16 @@
 {{#if initialized}}
-  {{#let (get service.actives name) as |active| }}
-    {{#let (component 'elsewhere-target' name=this.name) as |elsewhereTarget| }}
-      {{#let (if active.lastObject.component (component active.lastObject.component) elsewhereTarget ) as |c| }}
-      {{#if hasBlock}}
-        {{yield c active.lastObject.outsideParams}}
-      {{else}}
-        {{component c}}
-      {{/if}}
-    {{/let}}
-    {{/let}}
+  {{log "name" this.name}}
+  {{#let (get this.service.activeInfo this.name) as |activeInfo| }}
+    {{log "actives" activeInfo}}
+    {{#if activeInfo}}
+        {{log "which" (if activeInfo.children.length "comp" "inline" )}}
+        {{#let (if activeInfo.component (component activeInfo.component) (component 'elsewhere-target' name=this.name) ) as |c| }}
+          {{#if hasBlock}}
+            {{yield c activeInfo.outsideParams}}
+          {{else}}
+            {{component c}}
+          {{/if}}
+        {{/let}}
+    {{/if}}
   {{/let}}
 {{/if}}

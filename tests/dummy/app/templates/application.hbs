@@ -40,10 +40,11 @@
   </div>
 
   <div class="bottom-bar">
-    {{#multiple-from-elsewhere name="actions" as |c|}}
+    {{#from-elsewhere name="actions" append=true as |c|}}
+      {{log "bottom" c}}
       <div class="action">
         {{component c}}
       </div>
-    {{/multiple-from-elsewhere}}
+    {{/from-elsewhere}}
   </div>
 </div>

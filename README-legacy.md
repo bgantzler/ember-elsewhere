@@ -4,6 +4,8 @@
 [![Ember Observer Score][ember-observer-badge]][ember-observer-url]
 ![Ember Version][ember-version]
 
+This explains how the components worked pre {{in-element}}. Now that {{in-element}} is available, some of the below usage will be deprecated.
+
 This addon makes it easy to manage sidebars, toolbars, popups, modals, or any piece of DOM that you want to lift outside your normal route hiearchy.
 
 It is similar to [ember-wormhole](https://github.com/yapplabs/ember-wormhole), but is a better choice when your target is within your own Ember app (as opposed to arbitrary, potentially foreign DOM). It is also easier to compose with animations and it's based on 100% public API.
@@ -24,12 +26,10 @@ Create a target named "my-right-sidebar":
 {{from-elsewhere name="my-right-sidebar"}}
 ```
 
-Anywhere else in your app, declare the content to render in the target:
+Anywhere else in your app, declare which component should render in the target -- complete with bound inputs and actions:
 
 ```hbs
-{{#to-elsewhere named="my-right-sidebar"}}
-    {{cool-thing  model=model launch=(action "launchIt")}}
-{{/to-elsewhere}}
+{{to-elsewhere named="my-right-sidebar" send=(component "cool-thing" model=model launch=(action "launchIt"))}}
 ```
 
 For fancier behaviors, you can use the block form of `{{#from-elsewhere}}`, which gives you an opportunity to extend the target's behavior in arbitrary ways. For example, this lets your target animate as its content changes:
@@ -47,20 +47,14 @@ For fancier behaviors, you can use the block form of `{{#from-elsewhere}}`, whic
 
 ## Rendering multiple components into a single target
 
-There might be use cases where you would like to render multiple component into a single target, for example a from-elsewhere "actions" might receive multiple action buttons via to-elsewhere. Pass the append property true.
+There might be use cases where you would like to render multiple component into a single target, for example a from-elsewhere "actions" might receive multiple action buttons via to-elsewhere. Instead of from-elsewhere just use the complementary **multiple-from-elsewhere** component.
 
 ```hbs
-{{from-elsewhere name="actions" append=true}}
+{{multiple-from-elsewhere name="actions"}}
 <!-- ... -->
-{{#to-elsewhere named="actions"}}
-  {{test-button text="Button1"}}
-{{/to=elsewhere}}
-{{#to-elsewhere named="actions"}}
-  {{test-button text="Button3"}}
-{{/to=elsewhere}}
-{{#to-elsewhere named="actions"}}
-  {{test-button text="Button2"}}
-{{/to=elsewhere}}
+{{to-elsewhere named="actions" send=(component "test-button" text="Button1")}}
+{{to-elsewhere named="actions" send=(component "test-button" text="Button3")}}
+{{to-elsewhere named="actions" send=(component "test-button" text="Button2")}}
 ```
 
 ## Passing additional state through to the target

@@ -19,7 +19,7 @@ export default Service.extend({
     };
   },
 
-  deregisterTarget() {
+  deregisterTarget(name) {
     delete this._targets[name];
   },
 
@@ -57,21 +57,37 @@ export default Service.extend({
       return;
     }
 
+    // this is for {{multiple-from-elsewhere}}
+    this.set('actives', this._createActives());
+    // this is for {{from-elsewhere}}
+    this.set('activeInfo', this._createActiveInfo());
+  },
+
+  _createActiveInfo() {
+    let activeInfo = {};
+
+    Object.keys(this._alive).forEach((sourceId) => {
+      let { target } = this._alive[sourceId];
+      activeInfo[target] = this._alive[sourceId];
+    });
+
+    return activeInfo;
+  },
+
+  _createActives() {
     let newActives = {};
     let alive = this._alive;
 
     Object.keys(alive).forEach((sourceId) => {
       let { target, component, order, outsideParams } = alive[sourceId];
-      if (component) {
-        newActives[target] = newActives[target] || emArray();
-        let newActive = component ? {component, order, outsideParams} : null;
-        newActives[target].push(newActive);
-      }
+      newActives[target] = newActives[target] || emArray();
+      let newActive = {component, order, outsideParams};
+      newActives[target].push(newActive);
     });
     Object.keys(newActives).forEach((target) => {
       newActives[target] = emArray(newActives[target].sortBy('order'));
     });
 
-    this.set('actives', EmObject.create(newActives));
+    return EmObject.create(newActives);
   }
 });
