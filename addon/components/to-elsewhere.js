@@ -17,6 +17,6 @@ export default Component.extend({
   },
   willDestroyElement() {
     this.get('service').clear(guidFor(this));
-  }
+  },
 
 });

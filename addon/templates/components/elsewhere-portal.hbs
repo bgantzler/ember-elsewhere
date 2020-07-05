@@ -1,5 +1,12 @@
-{{#if initialized}}
-  {{#in-element this.targetElement}}
-    {{yield}}
-  {{/in-element}}
+{{#if this.initialized}}
+  {{log "append" this.targetAppend}}
+  {{#if this.targetAppend}}
+    {{#in-element this.targetElement insertBefore=null}}
+      {{yield}}
+    {{/in-element}}
+  {{else}}
+    {{#in-element this.targetElement}}
+      {{yield}}
+    {{/in-element}}
+  {{/if}}
 {{/if}}

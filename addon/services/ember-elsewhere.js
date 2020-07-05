@@ -8,7 +8,23 @@ export default Service.extend({
     this._super();
     this.set('actives', EmObject.create());
     this._alive = {};
+    this._targets = {};
     this._counter = 1;
+  },
+
+  registerTarget(name, options) {
+    this._targets[name] = {
+      name,
+      options
+    };
+  },
+
+  deregisterTarget() {
+    delete this._targets[name];
+  },
+
+  targetFor(name) {
+    return this._targets[name];
   },
 
   show(sourceId, name, component, outsideParams, order = 0) {
@@ -46,9 +62,11 @@ export default Service.extend({
 
     Object.keys(alive).forEach((sourceId) => {
       let { target, component, order, outsideParams } = alive[sourceId];
-      newActives[target] = newActives[target] || emArray();
-      let newActive = component ? { component, order, outsideParams } : null;
-      newActives[target].push(newActive);
+      if (component) {
+        newActives[target] = newActives[target] || emArray();
+        let newActive = component ? {component, order, outsideParams} : null;
+        newActives[target].push(newActive);
+      }
     });
     Object.keys(newActives).forEach((target) => {
       newActives[target] = emArray(newActives[target].sortBy('order'));

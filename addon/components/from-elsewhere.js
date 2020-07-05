@@ -26,12 +26,14 @@ export default Component.extend({
   // render.
   initialized: false,
 
-
   // we use init here instead of didInsertElement because we want to
   // take action even in fastboot.
   init() {
     this._super();
 
+    this.get('service').registerTarget(this.get('name'), {
+      append: this.get('append')
+    })
     let promise = new Promise(resolve => {
       schedule('afterRender', () => {
         if (!this.isDestroyed) {
@@ -45,6 +47,10 @@ export default Component.extend({
     if (fastboot && fastboot.get("isFastBoot")) {
       fastboot.deferRendering(promise);
     }
+  },
+
+  willDestroy() {
+    this.get('service').deregisterTarget(this.get('name'));
   }
 
 });
