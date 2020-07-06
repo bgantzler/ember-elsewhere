@@ -24,19 +24,23 @@ Create a target named "my-right-sidebar":
 {{from-elsewhere name="my-right-sidebar"}}
 ```
 
-Anywhere else in your app, declare the content to render in the target:
+Anywhere else in your app, declare the content to render in the target using the block form of to-elsewhere.
 
 ```hbs
 {{#to-elsewhere named="my-right-sidebar"}}
     {{cool-thing  model=model launch=(action "launchIt")}}
 {{/to-elsewhere}}
 ```
-## Animation ##
-The old way of using send with the component, has the from-elsewhere doing then rendering and the animation works as before. But the in-element is defined on the to side and animation does not work in the examples. Research will have to be done on how animation can be used with in-element.
+
+Or send which component should render in the target -- complete with bound inputs and actions:
+
+```hbs
+{{to-elsewhere named="my-right-sidebar" send=(component "cool-thing" model=model launch=(action "launchIt"))}}
+```
 
 ## Rendering multiple components into a single target
 
-There might be use cases where you would like to render multiple component into a single target, for example a from-elsewhere "actions" might receive multiple action buttons via to-elsewhere. Pass the multiple property true.
+There might be use cases where you would like to render multiple component into a single target, for example a from-elsewhere "actions" might receive multiple action buttons via to-elsewhere. Pass the multiple property true. This only works for the block form of to-elsewhere. 
 
 ```hbs
 {{from-elsewhere name="actions" multiple=true}}
@@ -50,6 +54,16 @@ There might be use cases where you would like to render multiple component into 
 {{#to-elsewhere named="actions"}}
   {{test-button text="Button2"}}
 {{/to=elsewhere}}
+```
+
+When sending components, instead of from-elsewhere use the complementary **multiple-from-elsewhere** component.
+
+```hbs
+{{multiple-from-elsewhere name="actions"}}
+<!-- ... -->
+{{to-elsewhere named="actions" send=(component "test-button" text="Button1")}}
+{{to-elsewhere named="actions" send=(component "test-button" text="Button3")}}
+{{to-elsewhere named="actions" send=(component "test-button" text="Button2")}}
 ```
 
 ## Passing additional state through to the target
@@ -77,6 +91,20 @@ When you're using the block form of `from-elsewhere`, you can pass additional st
     </div>
 {{/from-elsewhere}}
 ```
+
+Currently, animation only works when sending components, here is an example.
+
+```hbs
+{{#from-elsewhere name="modal" as |modal|}}
+  {{#liquid-bind modal as |currentModal|}}
+    <div class="modal-background"></div>
+    <div class="modal-container">
+      {{component modal}}
+    </div>
+  {{/liquid-bind}}
+{{/from-elsewhere}}
+```
+
 
 ## Crossing Engines
 
