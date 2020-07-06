@@ -9,6 +9,7 @@ export default Component.extend({
   service: service('ember-elsewhere'),
 
   didInsertElement() {
+    console.log("create")
     let name = get(this, 'name');
     get(this, 'service').registerTarget(name, {
       name,
@@ -16,5 +17,9 @@ export default Component.extend({
       element: document.querySelector(`[name='${name}']`)
     });
   },
+  willDestroy() {
+    console.log("remove")
+    this.get('service').deregisterTarget(this.get('name'));
+  }
 
 });

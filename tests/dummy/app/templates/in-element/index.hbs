@@ -1,0 +1,11 @@
+{{!- BEGIN-SNIPPET in-element-index }}
+<p>This is the first page. It sends the "first-sidebar" component into the "right" sidebar.</p>
+
+<p>The model says: {{model.title}}</p>
+
+{{#to-elsewhere named="right"}}
+  {{first-sidebar model=model}}
+{{/to-elsewhere}}
+{{!- END-SNIPPET }}
+
+{{code-snippet name="in-element-index.hbs"}}

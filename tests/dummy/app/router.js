@@ -7,9 +7,16 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
-  this.route('second');
-  this.route('third');
-  this.route('fourth');
+  this.route('in-element', function() {
+    this.route('second');
+    this.route('third');
+    this.route('fourth');
+  });
+  this.route('component', function() {
+    this.route('second');
+    this.route('third');
+    this.route('fourth');
+  });
 });
 
 export default Router;

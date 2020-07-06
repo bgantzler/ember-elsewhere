@@ -1,0 +1,12 @@
+{{!- BEGIN-SNIPPET in-element-second }}
+<div>This is the second page. It sends the "second-tools" component into the green "tools" bar, and receives actions back.</div>
+{{#each handled as |h|}}
+  <div>{{h}}</div>
+{{/each}}
+
+{{#to-elsewhere named="tools"}}
+  {{second-tools doIt=(action "handleIt")}}
+{{/to-elsewhere}}
+{{!- END-SNIPPET }}
+
+{{code-snippet name="in-element-second.hbs"}}

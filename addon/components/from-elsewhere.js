@@ -46,8 +46,4 @@ export default Component.extend({
     }
   },
 
-  willDestroy() {
-    this.get('service').deregisterTarget(this.get('name'));
-  }
-
 });

@@ -31,19 +31,8 @@ Anywhere else in your app, declare the content to render in the target:
     {{cool-thing  model=model launch=(action "launchIt")}}
 {{/to-elsewhere}}
 ```
-
-For fancier behaviors, you can use the block form of `{{#from-elsewhere}}`, which gives you an opportunity to extend the target's behavior in arbitrary ways. For example, this lets your target animate as its content changes:
-
-```hbs
-{{#from-elsewhere name="modal" as |modal|}}
-  {{#liquid-bind modal as |currentModal|}}
-    <div class="modal-background"></div>
-    <div class="modal-container">
-      {{component modal}}
-    </div>
-  {{/liquid-bind}}
-{{/from-elsewhere}}
-```
+## Animation ##
+The old way of using send with the component, has the from-elsewhere doing then rendering and the animation works as before. But the in-element is defined on the to side and animation does not work in the examples. Research will have to be done on how animation can be used with in-element.
 
 ## Rendering multiple components into a single target
 
@@ -65,33 +54,29 @@ There might be use cases where you would like to render multiple component into 
 
 ## Passing additional state through to the target
 
-When you're using the block form of `from-elsewhere`, it's entirely up to you what information you pass to the target. It can be more than just a component. Here is a complete example of an animatable modal that supports an `onOutsideClick` action while providing shared layout for the background and container:
+When you're using the block form of `from-elsewhere`, you can pass additional state to the target with the `outsideParams` property. Here is an example of a modal that supports an `onOutsideClick` action while providing shared layout for the background and container:
 
 ```hbs
-{{to-elsewhere named="modal"
-               send=(component "warning-message")
-               outsideParams=(hash onOutsideClick=(action "close") 
-                              title="modal title")
-                          }}
+{{#to-elsewhere named="modal"
+   outsideParams=(hash onOutsideClick=(action "close") 
+                      title="modal title"
+                 )
+}}
+   {{warning-message}}
+{{/to-elsewhere}}
 ```
 
 ```hbs
 {{#from-elsewhere name="modal" as |modal outsideParams|}}
-  {{#liquid-bind modal as |currentModal|}}
     <div class="modal-container">
       <div class="modal-background" onclick={{action outsideParams.onOutsideClick}}></div>
       <div class="modal-dialog" >
         <div class="modal-title">{{outsideParams.title}}</div>
-        {{component currentModal}}
+        {{component modal}}
       </div>
     </div>
-  {{/liquid-bind}}
 {{/from-elsewhere}}
 ```
-
-If you plan to `send` a component, you should use Ember's [component helper](https://guides.emberjs.com/release/components/defining-a-component/#toc_dynamically-rendering-a-component).
-The component helper accepts the component name and other properties, such as `{{component "my-component-name" someValue="something"}}`, which will cover most use cases.
-However, if you need to provide additional content to use outside of the component scope, that is when you can use the `outsideParams` attribute.
 
 ## Crossing Engines
 

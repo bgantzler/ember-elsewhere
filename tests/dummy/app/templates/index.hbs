@@ -1,9 +1,5 @@
-{{!- BEGIN-SNIPPET index }}
-<p>This is the first page. It sends the "first-sidebar" component into the "right" sidebar.</p>
+<p>
+  Ember-elsewhere can use the {{in-element}} helper to allow for a block for of {{to-elsewhere}}
+  or the original for to send components
+</p>
 
-<p>The model says: {{model.title}}</p>
-
-{{to-elsewhere named="right" send=(component "first-sidebar" model=model)}}
-{{!- END-SNIPPET }}
-
-{{code-snippet name="index.hbs"}}

@@ -13,6 +13,7 @@ export default Service.extend({
   },
 
   registerTarget(name, options) {
+    console.log("register", name);
     let targets = Object.assign({}, this.targets);
     targets[name] = options;
 
@@ -21,6 +22,7 @@ export default Service.extend({
   },
 
   deregisterTarget(name) {
+    console.log("destroy", name);
     let targets = Object.assign({}, this.targets);
     delete targets[name];
     set(this, 'targets', targets);
@@ -56,6 +58,7 @@ export default Service.extend({
       return;
     }
 
+    console.log("Process");
     // this is for {{multiple-from-elsewhere}}
     set(this, 'actives', this._createActives());
     // this is for {{from-elsewhere}}

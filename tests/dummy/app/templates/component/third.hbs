@@ -1,0 +1,15 @@
+{{! BEGIN-SNIPPET component-third }}
+<p>This is the third page.</p>
+
+<p><button {{action (action (mut warn) true)}}>Launch a modal</button></p>
+
+{{to-elsewhere named="tools" send=(component "third-tools") }}
+
+{{#if warn}}
+  {{to-elsewhere named="modal" send=(hash body=(component "warning-modal" onCancel=(action (mut warn) false))
+          onOutsideClick=(action (mut warn) false)) }}
+{{/if}}
+
+{{! END-SNIPPET }}
+
+{{code-snippet name="component-third.hbs"}}
