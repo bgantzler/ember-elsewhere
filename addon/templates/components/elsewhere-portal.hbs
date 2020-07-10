@@ -1,6 +1,7 @@
 {{log "elsewhere-portal" this.target}}
 {{#if this.target.targetElement}}
   {{#if this.target.multiple}}
+    {{log "yeild in-element multiple" this.target.targetElement}}
     {{#in-element this.target.targetElement insertBefore=null}}
       {{yield}}
     {{/in-element}}
