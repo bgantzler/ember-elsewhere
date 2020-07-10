@@ -58,6 +58,7 @@ export default Service.extend({
   },
 
   clear(sourceId) {
+    console.log("clear", sourceId);
     delete this._alive[sourceId];
     // this._createActiveInfo()
     this._schedule();
@@ -81,14 +82,15 @@ export default Service.extend({
   },
 
   _createActiveInfo() {
-    // let activeInfo = {};
+    let activeInfo = {};
 
     Object.keys(this._alive).forEach((sourceId) => {
       let { target } = this._alive[sourceId];
-      set(this.activeInfo, target, this._alive[sourceId]);
+      set(activeInfo, target, this._alive[sourceId]);
     });
 
-    // return activeInfo;
+    console.log("activeInfo created", this.activeInfo)
+    set(this, 'activeInfo', activeInfo);
   },
 
   _createActives() {
