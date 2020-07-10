@@ -1,10 +1,12 @@
-{{#if this.target.element}}
+{{log "elsewhere-portal" this.target}}
+{{#if this.target.targetElement}}
   {{#if this.target.multiple}}
-    {{#in-element this.target.element insertBefore=null}}
+    {{#in-element this.target.targetElement insertBefore=null}}
       {{yield}}
     {{/in-element}}
   {{else}}
-    {{#in-element this.target.element}}
+    {{log "yeild in-element" this.target.targetElement}}
+    {{#in-element this.target.targetElement}}
       {{yield}}
     {{/in-element}}
   {{/if}}

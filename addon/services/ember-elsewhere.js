@@ -10,37 +10,49 @@ export default Service.extend({
     this._alive = {};
     this.targets = {};
     this._counter = 1;
+    this.activeInfo = {};
   },
 
-  registerTarget(name, options) {
-    console.log("register", name);
-    let targets = Object.assign({}, this.targets);
-    targets[name] = options;
+  registerTarget(definition) {
+    let {name, targetId } = definition;
+    console.log("register", name, definition);
+    let targets = this.targets[name] || (this.targets[name] = {} );
+    // let targets = Object.assign({}, this.targets);
+    targets[targetId] = definition;
 
-    // Targets must be immutable until we can get tracking
-    set(this, 'targets', targets);
+    // Targets must be immutable until we can get tracking?
+    set(this, 'targets', Object.assign({}, this.targets));
+    // this is for {{from-elsewhere}}
+    // set(this, 'activeInfo', this._createActiveInfo());
+
   },
 
-  deregisterTarget(name) {
-    console.log("destroy", name);
-    let targets = Object.assign({}, this.targets);
-    delete targets[name];
-    set(this, 'targets', targets);
+  deregisterTarget(definition) {
+    let {name, targetId } = definition;
+    console.log("destroy", name, definition);
+    // let targets = Object.assign({}, this.targets);
+    let targets = this.targets[name];
+    if (targets) {
+      delete targets[targetId];
+    }
+    // set(this, 'targets', Object.assign({}, this.targets));
+    // this is for {{from-elsewhere}}
+    // set(this, 'activeInfo', this._createActiveInfo());
   },
 
-  show(sourceId, name, component, outsideParams, order = 0) {
+  show({sourceId, name, component, outsideParams, order = 0, target}) {
     // if current component has specific order that is greater than current internal count
     // update internal count so any subsequent component that does not provide order will
     // be after.
     if (this._counter < order) {
       this._counter = order + 1
     }
-    this._alive[sourceId] = {
+    set(this._alive, sourceId, {
       target: name || 'default',
-      component,
+      component: component || target,
       order: order || this._counter++,
       outsideParams
-    };
+    });
     this._schedule();
   },
 
@@ -60,20 +72,21 @@ export default Service.extend({
 
     console.log("Process");
     // this is for {{multiple-from-elsewhere}}
-    set(this, 'actives', this._createActives());
+    // set(this, 'actives', this._createActives());
     // this is for {{from-elsewhere}}
-    set(this, 'activeInfo', this._createActiveInfo());
+    // set(this, 'activeInfo', this._createActiveInfo());
+    this._createActiveInfo()
   },
 
   _createActiveInfo() {
-    let activeInfo = {};
+    // let activeInfo = {};
 
     Object.keys(this._alive).forEach((sourceId) => {
       let { target } = this._alive[sourceId];
-      activeInfo[target] = this._alive[sourceId];
+      set(this.activeInfo, target, this._alive[sourceId]);
     });
 
-    return activeInfo;
+    // return activeInfo;
   },
 
   _createActives() {

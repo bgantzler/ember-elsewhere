@@ -1,5 +1,18 @@
-{{#if hasBlock}}
-  {{#elsewhere-portal name=this.named}}
-    {{yield}}
-  {{/elsewhere-portal}}
-{{/if}}
+{{#let
+  (hash
+    name=this.named
+    component=this.send
+    outsideParams=this.outsideParams
+    order=this.order
+    sourceId=this.sourceId
+    target=(component 'elsewhere-target' name=this.named targetId=this.sourceId)
+  )
+as |params|}}
+  {{did-insert (action this.show) params}}
+  {{did-update (action this.show) params}}
+  {{#if hasBlock}}
+    {{#elsewhere-portal name=this.named targetId=params.sourceId}}
+      {{yield}}
+    {{/elsewhere-portal}}
+  {{/if}}
+{{/let}}

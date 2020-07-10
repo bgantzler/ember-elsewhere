@@ -1,13 +1,15 @@
 {{#if initialized}}
+  {{log "initialized target" this.name}}
+  {{log "service.targets" this.service.targets}}
   {{#let (get this.service.activeInfo this.name) as |activeInfo| }}
+    {{log "target activeInfo" this.name activeInfo}}
     {{#if activeInfo}}
-      {{#let (if activeInfo.component activeInfo.component (component 'elsewhere-target' name=this.name multiple=this.multiple) ) as |c| }}
+        {{log "activeInfo.component" activeInfo.component}}
         {{#if hasBlock}}
-          {{yield c activeInfo.outsideParams}}
+          {{yield activeInfo.component activeInfo.outsideParams}}
         {{else}}
-          {{component c}}
+          {{component activeInfo.component}}
         {{/if}}
-      {{/let}}
     {{/if}}
   {{/let}}
 {{/if}}

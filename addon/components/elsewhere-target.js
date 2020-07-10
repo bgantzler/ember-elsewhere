@@ -1,25 +1,33 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import {get} from '@ember/object';
+import {get, set} from '@ember/object';
 import layout from '../templates/components/elsewhere-target';
+import { guidFor } from '@ember/object/internals';
 
 export default Component.extend({
   layout,
   tagName: '',
   service: service('ember-elsewhere'),
+  targetElement: undefined,
 
-  didInsertElement() {
-    console.log("create")
+  getOptions() {
     let name = get(this, 'name');
-    get(this, 'service').registerTarget(name, {
+    return {
+      targetId: get(this, 'targetId'),
       name,
       multiple: get(this, 'multiple'),
-      element: document.querySelector(`[name='${name}']`)
-    });
+      targetElement: get(this, 'targetElement')
+    };
+  },
+
+  didInsertElement() {
+    let name = get(this, 'name');
+    set(this, 'targetElement', document.querySelector(`[name='${name}']`));
+    get(this, 'service').registerTarget(this.getOptions(name) );
   },
   willDestroy() {
-    console.log("remove")
-    this.get('service').deregisterTarget(this.get('name'));
+    let name = get(this, 'name');
+    this.get('service').deregisterTarget(this.getOptions(name));
   }
 
 });

@@ -10,7 +10,7 @@ export default Component.extend({
 
   target: computed('name', 'service.targets', function() {
     let target = get(this, `service.targets.${get(this, 'name')}`) || {};
-    return target;
+    return target[get(this, 'targetId')];
   }),
 
 });
