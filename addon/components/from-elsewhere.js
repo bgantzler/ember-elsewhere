@@ -2,6 +2,7 @@ import { getOwner } from '@ember/application';
 import { schedule } from '@ember/runloop';
 import { Promise } from 'rsvp';
 import { inject as service } from '@ember/service';
+import { computed, get, set } from '@ember/object';
 import Component from '@ember/component';
 import layout from '../templates/components/from-elsewhere';
 
@@ -11,12 +12,14 @@ export default Component.extend({
   tagName: '',
 
   didReceiveAttrs() {
-    if (!this.get('name')) {
-      this.set('name', 'default');
+    if (!get(this, 'name')) {
+      set(this, 'name', 'default');
     }
-    if (this.get('named')) {
+    if (get(this, 'named')) {
       throw new Error(`from-elsewhere takes a "name" parameter, not "named"`);
     }
+
+    set(this, "activeInfo", computed.alias(`service.activeInfo.${get(this, 'name')}`));
   },
 
   // We don't yield any content on the very first render pass, because
@@ -34,14 +37,14 @@ export default Component.extend({
     let promise = new Promise(resolve => {
       schedule('afterRender', () => {
         if (!this.isDestroyed) {
-          this.set('initialized', true);
+          set(this, 'initialized', true);
         }
         resolve();
       });
     });
 
     let fastboot = getOwner(this).lookup('service:fastboot');
-    if (fastboot && fastboot.get("isFastBoot")) {
+    if (fastboot && get(fastboot, "isFastBoot")) {
       fastboot.deferRendering(promise);
     }
   },

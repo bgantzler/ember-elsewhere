@@ -53,11 +53,13 @@ export default Service.extend({
       order: order || this._counter++,
       outsideParams
     });
+    // this._createActiveInfo()
     this._schedule();
   },
 
   clear(sourceId) {
     delete this._alive[sourceId];
+    // this._createActiveInfo()
     this._schedule();
   },
 

@@ -1,8 +1,7 @@
 {{#if initialized}}
   {{log "initialized target" this.name}}
   {{log "service.targets" this.service.targets}}
-  {{#let (get this.service.activeInfo this.name) as |activeInfo| }}
-    {{log "target activeInfo" this.name activeInfo}}
+    {{log "target activeInfo" this.name this.activeInfo}}
     {{#if activeInfo}}
         {{log "activeInfo.component" activeInfo.component}}
         {{#if hasBlock}}
@@ -11,5 +10,4 @@
           {{component activeInfo.component}}
         {{/if}}
     {{/if}}
-  {{/let}}
 {{/if}}
