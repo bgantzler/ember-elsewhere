@@ -10,6 +10,17 @@ Router.map(function() {
   this.route('second');
   this.route('third');
   this.route('fourth');
+  this.route('send-component', function() {
+    this.route('fourth');
+    this.route('second');
+    this.route('third');
+  });
+
+  this.route('in-element', function() {
+    this.route('fourth');
+    this.route('second');
+    this.route('third');
+  });
 });
 
 export default Router;
